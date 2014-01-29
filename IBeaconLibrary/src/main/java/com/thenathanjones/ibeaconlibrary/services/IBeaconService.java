@@ -7,10 +7,9 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by thenathanjones on 24/01/2014.
@@ -21,6 +20,7 @@ public class IBeaconService implements BluetoothAdapter.LeScanCallback {
 
     private final Context mContext;
     private final Collection<IBeaconListener> mListeners = new ArrayList<IBeaconListener>();
+    private Map<String, Range> mKnownBeacons = new HashMap<String, Range>();
 
     public IBeaconService(Context context) {
         mContext = context;
@@ -71,23 +71,17 @@ public class IBeaconService implements BluetoothAdapter.LeScanCallback {
     }
 
     private void parseBeaconFrom(int rssi, byte[] scanRecord) {
-        if (isBeacon(scanRecord)) {
+        if (IBeacon.isBeacon(scanRecord)) {
             Log.d(TAG + ":parseBeacon", "Congratulations, you have found an iBeacon!");
             IBeacon beacon = IBeacon.from(scanRecord);
+
+            Range lastRange = mKnownBeacons.get(beacon.uuid);
+            Range newRange = Range.from(System.currentTimeMillis(), rssi, beacon.txPower, lastRange);
+            mKnownBeacons.put(beacon.uuid, newRange);
+            Log.i("beaconParsed", "Beacon " + beacon.uuid + " located approx. " + newRange.accuracy + "m");
         }
         else {
             Log.d(TAG + ":parseBeacon", "Record is not an iBeacon");
         }
-    }
-
-
-    private boolean isBeacon(byte[] scanRecord) {
-        Integer[] headerBytes = new Integer[9];
-
-        for (int i=0;i<headerBytes.length;i++) {
-            headerBytes[i] = scanRecord[i] & 0xff;
-        }
-
-        return Collections.indexOfSubList(Arrays.asList(headerBytes), IBeacon.IBEACON_HEADER) == IBeacon.IBEACON_HEADER_INDEX;
     }
 }

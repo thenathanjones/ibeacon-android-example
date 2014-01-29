@@ -3,6 +3,7 @@ package com.thenathanjones.ibeaconlibrary.services;
 import android.util.Log;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,5 +67,15 @@ public class IBeacon {
         builder.append(proximityUuidHexString.substring(20, 32));
 
         return builder.toString();
+    }
+
+    static boolean isBeacon(byte[] scanRecord) {
+        Integer[] headerBytes = new Integer[9];
+
+        for (int i=0;i<headerBytes.length;i++) {
+            headerBytes[i] = scanRecord[i] & 0xff;
+        }
+
+        return Collections.indexOfSubList(Arrays.asList(headerBytes), IBEACON_HEADER) == IBEACON_HEADER_INDEX;
     }
 }
