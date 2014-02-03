@@ -6,6 +6,8 @@
     tools:context="com.thenathanjones.ibeaconlibrary.MainActivity"
     tools:ignore="MergeRootFrame">
 
-    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/beacon"/>
+    <ListView android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/beaconList"></ListView>
 
     </FrameLayout>
