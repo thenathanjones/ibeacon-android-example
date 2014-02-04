@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -70,10 +71,15 @@ public class IBeaconService implements BluetoothAdapter.LeScanCallback {
 
     private void updateListenersWith(Collection<IBeacon> beacons) {
         long now = System.currentTimeMillis();
+        Collection<IBeacon> toRemove = new HashSet<IBeacon>();
         for (IBeacon beacon : beacons) {
             if ((now - beacon.lastReport) > 5000) {
-                mKnownBeacons.remove(beacon);
+                toRemove.add(beacon);
             }
+        }
+
+        for (IBeacon beacon : toRemove) {
+            mKnownBeacons.remove(beacon.hash);
         }
 
         for (IBeaconListener listener : mListeners) {
