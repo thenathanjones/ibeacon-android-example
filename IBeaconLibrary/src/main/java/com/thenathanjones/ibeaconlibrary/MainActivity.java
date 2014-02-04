@@ -1,8 +1,11 @@
 package com.thenathanjones.ibeaconlibrary;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -26,10 +29,34 @@ public class MainActivity extends Activity implements IBeaconListener {
 
         mIBeaconService = new IBeaconService(this);
 
-
         mListView = (ListView)findViewById(R.id.beaconList);
         mListAdapter = new BeaconListAdapter(this);
         mListView.setAdapter(mListAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                break;
+            case R.id.canvas:
+                goToCanvas();
+                break;
+        }
+
+        return false;
+    }
+
+    private void goToCanvas() {
+        Intent viewCanvas = new Intent(this, CanvasActivity.class);
+        startActivity(viewCanvas);
     }
 
     @Override

@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context="com.thenathanjones.ibeaconlibrary.CanvasActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <com.thenathanjones.ibeaconlibrary.LocationView android:layout_width="fill_parent"
+                                                    android:layout_height="fill_parent"
+            android:id="@+id/locationView"/>
+    </LinearLayout>
+
