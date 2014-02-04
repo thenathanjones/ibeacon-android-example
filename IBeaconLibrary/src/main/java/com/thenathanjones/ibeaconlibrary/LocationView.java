@@ -25,14 +25,16 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
     private TimerTask mDrawLoop;
     private SurfaceHolder mSurfaceHolder;
     private Timer mTimer = new Timer();
+    private double mRoomWidth = 727;
+    private double mRoomHeight = 771;
     private int mCanvasWidth;
     private int mCanvasHeight;
     private final List<IBeacon> mBeacons = new ArrayList<IBeacon>();
     private final Map<String, IBeaconLocation> mBeaconLocations = new HashMap<String, IBeaconLocation>() {{
-        put("55741", IBeaconLocation.from(0.25, 0.25, 1));
-        put("240", IBeaconLocation.from(0.35, 0.35, 1));
-        put("268", IBeaconLocation.from(0.1, 0.2, 0.2));
-        put("27760", IBeaconLocation.from(1, 1, 1));
+        put("55741", IBeaconLocation.from(597, 30, 1));
+        put("240", IBeaconLocation.from(487, 641, 1));
+        put("268", IBeaconLocation.from(230, 60, 0.2));
+        put("27760", IBeaconLocation.from(42, 270, 1));
         put("30397", IBeaconLocation.from(1, 1, 1));
     }};
 
@@ -82,7 +84,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
 
                     canvas.drawColor(Color.BLACK);
 
-                    drawBeaconsOn(canvas);
+                    drawVisibleBeaconsOn(canvas);
                 }
             }
         } finally {
@@ -92,11 +94,13 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
         }
     }
 
-    private void drawBeaconsOn(Canvas canvas) {
+    private void drawVisibleBeaconsOn(Canvas canvas) {
         for (IBeacon report : mBeacons) {
             IBeaconLocation beaconLocation = mBeaconLocations.get(report.minor + "");
             if (beaconLocation != null) {
-                canvas.drawCircle((int)(beaconLocation.x * mCanvasHeight), (int)(beaconLocation.y * mCanvasWidth), 5, mLocationPaint);
+                int x = (int) ((beaconLocation.x / mRoomWidth) * mCanvasWidth);
+                int y = (int) ((beaconLocation.y / mRoomHeight) * mCanvasHeight);
+                canvas.drawCircle(x, y, 5, mLocationPaint);
             }
         }
     }
