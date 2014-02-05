@@ -9,6 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.thenathanjones.ibeaconlibrary.services.IBeacon;
+import com.thenathanjones.ibeaconlibrary.services.IBeaconConstants;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +45,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
     private Paint mRadiusPaint;
     private Paint mUserLocationPaint;
     private Paint mLabelPaint;
+    private Location mExistingUserLocation;
 
     public LocationView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -162,11 +164,24 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
                                                                    location2, distance2,
                                                                    location3, distance3);
 
+            if (mExistingUserLocation != null) {
+                userLocation = filteredLocation(userLocation, mExistingUserLocation);
+            }
+
             int x = translateX(userLocation.x * 100.0);
             int y = translateY(userLocation.y * 100.0);
             canvas.drawCircle(x, y, 20, mUserLocationPaint);
             canvas.drawText("x: " + x + ", y: " + y, x + 50, y + 5, mLabelPaint);
+
+            mExistingUserLocation = userLocation;
         }
+    }
+
+    private Location filteredLocation(Location newLocation, Location previousLocation) {
+        double x = previousLocation.x * (1 - IBeaconConstants.BLEND_FACTOR) + newLocation.x * IBeaconConstants.BLEND_FACTOR;
+        double y = previousLocation.y * (1 - IBeaconConstants.BLEND_FACTOR) + newLocation.y * IBeaconConstants.BLEND_FACTOR;
+
+        return new Location(x,y);
     }
 
     @Override
