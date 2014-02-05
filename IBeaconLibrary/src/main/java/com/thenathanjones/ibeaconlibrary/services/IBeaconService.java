@@ -121,7 +121,7 @@ public class IBeaconService implements BluetoothAdapter.LeScanCallback {
             scannedBeacon.updateRangeFrom(rssi, existingBeacon);
 
             mKnownBeacons.put(scannedBeacon.hash, scannedBeacon);
-            Log.i("beaconParsed", "Beacon " + scannedBeacon.hash + " located approx. " + scannedBeacon.accuracy + "m");
+            Log.i("beaconParsed", "Beacon " + scannedBeacon.hash + " located approx. " + scannedBeacon.accuracyInMetres + "m");
         }
         else {
             Log.d(TAG + ":parseBeacon", "Record is not an iBeacon");

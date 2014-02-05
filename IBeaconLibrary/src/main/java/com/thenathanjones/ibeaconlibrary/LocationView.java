@@ -124,7 +124,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
             if (beaconLocation != null) {
                 int x = translateX(beaconLocation.x);
                 int y = translateY(beaconLocation.y);
-                int radius = (int) (report.accuracy * 100.0 / mRoomWidth * mCanvasWidth);
+                int radius = (int) (report.accuracyInMetres * 100.0 / mRoomWidth * mCanvasWidth);
                 canvas.drawCircle(x, y, 5, mLocationPaint);
                 canvas.drawCircle(x, y, radius, mRadiusPaint);
             }
@@ -143,7 +143,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
         Collections.sort(mBeacons, new Comparator<IBeacon>() {
             @Override
             public int compare(IBeacon lhs, IBeacon rhs) {
-                return lhs.accuracy > rhs.accuracy ? 1 : -1;
+                return lhs.accuracyInMetres > rhs.accuracyInMetres ? 1 : -1;
             }
         });
 
@@ -151,13 +151,13 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
             List<IBeacon> closestBeacons = mBeacons.subList(0, 3);
 
             IBeaconLocation location1 = mBeaconLocations.get(closestBeacons.get(0).minor + "");
-            double distance1 = closestBeacons.get(0).accuracy;
+            double distance1 = closestBeacons.get(0).accuracyInMetres;
             canvas.drawCircle(translateX(location1.x), translateY(location1.y), 5, mUserLocationPaint);
             IBeaconLocation location2 = mBeaconLocations.get(closestBeacons.get(1).minor + "");
-            double distance2 = closestBeacons.get(1).accuracy;
+            double distance2 = closestBeacons.get(1).accuracyInMetres;
             canvas.drawCircle(translateX(location2.x), translateY(location2.y), 5, mUserLocationPaint);
             IBeaconLocation location3 = mBeaconLocations.get(closestBeacons.get(2).minor + "");
-            double distance3 = closestBeacons.get(2).accuracy;
+            double distance3 = closestBeacons.get(2).accuracyInMetres;
             canvas.drawCircle(translateX(location3.x), translateY(location3.y), 5, mUserLocationPaint);
 
             Location userLocation = Trilateration.findLocationFrom(location1, distance1,

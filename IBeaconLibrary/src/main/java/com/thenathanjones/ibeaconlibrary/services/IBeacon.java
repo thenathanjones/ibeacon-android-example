@@ -17,7 +17,7 @@ public class IBeacon {
     public final int txPower;
     public final String hash;
 
-    public double accuracy;
+    public double accuracyInMetres;
     public long lastReport;
 
     public IBeacon(String uuid, int major, int minor, int txPower) {
@@ -78,10 +78,10 @@ public class IBeacon {
         double accuracy = accuracyFrom(rssi, txPower);
 
         if (existingBeacon != null) {
-            accuracy = filteredAccuracy(accuracy, existingBeacon.accuracy);
+            accuracy = filteredAccuracy(accuracy, existingBeacon.accuracyInMetres);
         }
 
-        this.accuracy = accuracy;
+        this.accuracyInMetres = accuracy;
         this.lastReport = System.currentTimeMillis();
     }
 

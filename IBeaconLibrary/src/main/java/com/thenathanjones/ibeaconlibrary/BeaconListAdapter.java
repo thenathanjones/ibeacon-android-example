@@ -70,7 +70,7 @@ public class BeaconListAdapter extends BaseAdapter {
         holder.minor.setText("Minor: " + corresponding.minor);
         holder.txPower.setText("Tx Power: " + corresponding.txPower);
         DecimalFormat df = new DecimalFormat("#.##");
-        holder.distance.setText("Approx. distance: " + df.format(corresponding.accuracy) + "m");
+        holder.distance.setText("Approx. distance: " + df.format(corresponding.accuracyInMetres) + "m");
 
         return itemView;
     }
