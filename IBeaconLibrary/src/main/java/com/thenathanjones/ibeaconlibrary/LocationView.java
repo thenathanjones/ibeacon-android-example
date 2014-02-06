@@ -5,12 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.thenathanjones.ibeaconlibrary.services.IBeacon;
 import com.thenathanjones.ibeaconlibrary.services.IBeaconConstants;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,18 +30,31 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
     private TimerTask mDrawLoop;
     private SurfaceHolder mSurfaceHolder;
     private Timer mTimer = new Timer();
-    private double mRoomWidth = 727;
-    private double mRoomHeight = 771;
     private int mCanvasWidth;
     private int mCanvasHeight;
     private final List<IBeacon> mBeacons = new ArrayList<IBeacon>();
+
+    // Heath and Kate's - kitchen:outside and garage:bannister
+    private double mRoomWidth = 667;
+    private double mRoomHeight = 443;
     private final Map<String, IBeaconLocation> mBeaconLocations = new HashMap<String, IBeaconLocation>() {{
-        put("55741", IBeaconLocation.from(597, 30, 1));
-        put("240", IBeaconLocation.from(487, 641, 1));
-        put("268", IBeaconLocation.from(230, 60, 0.2));
-        put("27760", IBeaconLocation.from(42, 270, 1));
-        put("30397", IBeaconLocation.from(1, 1, 1));
+        put("240", IBeaconLocation.from(667, 95, 1)); // black bluecat
+        put("268", IBeaconLocation.from(70, 115, 0.2));  // white bluecat
+        put("27760", IBeaconLocation.from(75, 350, 1)); // purple estimote
+        put("30397", IBeaconLocation.from(270, 0, 1)); // green estimote
+        put("55741", IBeaconLocation.from(663, 398, 1)); // blue estimote
     }};
+
+    // Home
+//    private double mRoomWidth = 727;
+//    private double mRoomHeight = 771;
+//    private final Map<String, IBeaconLocation> mBeaconLocations = new HashMap<String, IBeaconLocation>() {{
+//        put("55741", IBeaconLocation.from(597, 30, 1));
+//        put("240", IBeaconLocation.from(487, 641, 1));
+//        put("268", IBeaconLocation.from(230, 60, 0.2));
+//        put("27760", IBeaconLocation.from(42, 270, 1));
+//        put("30397", IBeaconLocation.from(1, 1, 1));
+//    }};
 
     private Paint mLocationPaint;
     private Paint mRadiusPaint;
