@@ -136,7 +136,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
     }
 
     private int translateY(double y) {
-        return (int) ((y / mRoomHeight) * (mRoomWidth / (double)mCanvasWidth) * mCanvasHeight);
+        return (int) ((y / mRoomHeight) * (mRoomHeight / mRoomWidth) * mCanvasWidth);
     }
 
     private void drawCalculatedLocationOn(Canvas canvas) {
