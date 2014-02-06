@@ -183,10 +183,12 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
                 userLocation = filteredLocation(userLocation, mExistingUserLocation);
             }
 
+            DecimalFormat formatter = new DecimalFormat("#.##");
             int x = translateX(userLocation.x * 100.0);
             int y = translateY(userLocation.y * 100.0);
+
             canvas.drawCircle(x, y, 20, mUserLocationPaint);
-            canvas.drawText("x: " + x + ", y: " + y, x + 50, y + 5, mLabelPaint);
+            canvas.drawText("x: " + formatter.format(userLocation.x) + ", y: " + formatter.format(userLocation.y), x + 50, y + 5, mLabelPaint);
 
             mExistingUserLocation = userLocation;
         }
