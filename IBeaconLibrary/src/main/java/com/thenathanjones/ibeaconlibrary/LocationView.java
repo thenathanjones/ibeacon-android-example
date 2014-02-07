@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -102,7 +101,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
             }
         };
 
-        mTimer.scheduleAtFixedRate(mDrawLoop, 0, 1000 / 20);
+        mTimer.scheduleAtFixedRate(mDrawLoop, 0, 1000 / 10);
     }
 
     public void updateBeaconsWith(Collection<IBeacon> newBeacons) {
@@ -164,20 +163,13 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
 
         if (mBeacons.size() > 2) {
             List<IBeacon> closestBeacons = mBeacons.subList(0, 3);
+            List<IBeaconLocation> closestBeaconLocations = new ArrayList<IBeaconLocation>();
+            for (IBeacon beacon : closestBeacons) {
+                closestBeaconLocations.add(mBeaconLocations.get(beacon.minor + ""));
+            }
+            drawClosestBeaconsOn(canvas, closestBeaconLocations);
 
-            IBeaconLocation location1 = mBeaconLocations.get(closestBeacons.get(0).minor + "");
-            double distance1 = closestBeacons.get(0).accuracyInMetres;
-            canvas.drawCircle(translateX(location1.x), translateY(location1.y), 5, mUserLocationPaint);
-            IBeaconLocation location2 = mBeaconLocations.get(closestBeacons.get(1).minor + "");
-            double distance2 = closestBeacons.get(1).accuracyInMetres;
-            canvas.drawCircle(translateX(location2.x), translateY(location2.y), 5, mUserLocationPaint);
-            IBeaconLocation location3 = mBeaconLocations.get(closestBeacons.get(2).minor + "");
-            double distance3 = closestBeacons.get(2).accuracyInMetres;
-            canvas.drawCircle(translateX(location3.x), translateY(location3.y), 5, mUserLocationPaint);
-
-            Location userLocation = Trilateration.findLocationFrom(location1, distance1,
-                                                                   location2, distance2,
-                                                                   location3, distance3);
+            Location userLocation = Trilateration.findLocationFrom(closestBeaconLocations, closestBeacons);
 
             if (mExistingUserLocation != null) {
                 userLocation = filteredLocation(userLocation, mExistingUserLocation);
@@ -191,6 +183,12 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
             canvas.drawText("x: " + formatter.format(userLocation.x) + ", y: " + formatter.format(userLocation.y), x + 50, y + 5, mLabelPaint);
 
             mExistingUserLocation = userLocation;
+        }
+    }
+
+    private void drawClosestBeaconsOn(Canvas canvas, List<IBeaconLocation> closestBeaconLocations) {
+        for (IBeaconLocation location : closestBeaconLocations) {
+            canvas.drawCircle(translateX(location.x), translateY(location.y), 5, mUserLocationPaint);
         }
     }
 

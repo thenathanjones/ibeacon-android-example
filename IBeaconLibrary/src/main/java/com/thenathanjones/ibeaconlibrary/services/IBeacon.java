@@ -28,6 +28,16 @@ public class IBeacon {
         this.hash = uuid + ":" + major + ":" + minor;
     }
 
+    static boolean isBeacon(byte[] scanRecord) {
+        Integer[] headerBytes = new Integer[9];
+
+        for (int i=0;i<headerBytes.length;i++) {
+            headerBytes[i] = scanRecord[i] & 0xff;
+        }
+
+        return Collections.indexOfSubList(Arrays.asList(headerBytes), IBeaconConstants.IBEACON_HEADER) == IBeaconConstants.IBEACON_HEADER_INDEX;
+    }
+
     public static IBeacon from(byte[] scanRecord) {
         String uuid = parseUUIDFrom(scanRecord);
         int major = (scanRecord[IBeaconConstants.MAJOR_INDEX] & 0xff) * 0x100 + (scanRecord[IBeaconConstants.MAJOR_INDEX+1] & 0xff);
@@ -45,8 +55,8 @@ public class IBeacon {
 
         for (int i=0;i<proximityUuidBytes.length;i++) {
             proximityUuidBytes[i] = scanRecord[i+ IBeaconConstants.PROXIMITY_UUID_INDEX] & 0xFF;
-            proximityUuidChars[i * 2] = IBeaconConstants.hexArray[proximityUuidBytes[i] >>> 4];
-            proximityUuidChars[i * 2 + 1] = IBeaconConstants.hexArray[proximityUuidBytes[i] & 0x0F];
+            proximityUuidChars[i * 2] = IBeaconConstants.HEX_ARRAY[proximityUuidBytes[i] >>> 4];
+            proximityUuidChars[i * 2 + 1] = IBeaconConstants.HEX_ARRAY[proximityUuidBytes[i] & 0x0F];
         }
 
         String proximityUuidHexString = new String(proximityUuidChars);
@@ -62,16 +72,6 @@ public class IBeacon {
         builder.append(proximityUuidHexString.substring(20, 32));
 
         return builder.toString();
-    }
-
-    static boolean isBeacon(byte[] scanRecord) {
-        Integer[] headerBytes = new Integer[9];
-
-        for (int i=0;i<headerBytes.length;i++) {
-            headerBytes[i] = scanRecord[i] & 0xff;
-        }
-
-        return Collections.indexOfSubList(Arrays.asList(headerBytes), IBeaconConstants.IBEACON_HEADER) == IBeaconConstants.IBEACON_HEADER_INDEX;
     }
 
     public void updateRangeFrom(int rssi, IBeacon existingBeacon) {
@@ -95,7 +95,7 @@ public class IBeacon {
             return Math.pow(ratio, 10);
         }
         else {
-            return (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
+            return 0.89976 * Math.pow(ratio, 7.7095) + 0.111;
         }
     }
 
