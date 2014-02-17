@@ -1,4 +1,4 @@
-package com.thenathanjones.ibeaconlibrary;
+package com.thenathanjones.ibeacon;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.thenathanjones.ibeaconlibrary.services.IBeacon;
+import com.thenathanjones.ibeaconlibrary.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -57,6 +57,7 @@ public class BeaconListAdapter extends BaseAdapter {
             holder.major = (TextView)itemView.findViewById(R.id.major);
             holder.minor = (TextView)itemView.findViewById(R.id.minor);
             holder.txPower = (TextView)itemView.findViewById(R.id.txPower);
+            holder.rssi = (TextView)itemView.findViewById(R.id.rssi);
             holder.distance = (TextView)itemView.findViewById(R.id.distance);
 
             itemView.setTag(holder);
@@ -70,7 +71,8 @@ public class BeaconListAdapter extends BaseAdapter {
         holder.minor.setText("Minor: " + corresponding.minor);
         holder.txPower.setText("Tx Power: " + corresponding.txPower);
         DecimalFormat df = new DecimalFormat("#.##");
-        holder.distance.setText("Approx. distance: " + df.format(corresponding.accuracyInMetres) + "m");
+        holder.rssi.setText("RSSI: " + df.format(corresponding.lastRssi()));
+        holder.distance.setText("Approx. distance: " + df.format(corresponding.distanceInMetres()) + "m");
 
         return itemView;
     }
@@ -80,6 +82,7 @@ public class BeaconListAdapter extends BaseAdapter {
         public TextView major;
         public TextView minor;
         public TextView txPower;
+        public TextView rssi;
         public TextView distance;
     }
 }

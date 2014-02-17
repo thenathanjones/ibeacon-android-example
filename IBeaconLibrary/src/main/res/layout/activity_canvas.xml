@@ -4,10 +4,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context="com.thenathanjones.ibeaconlibrary.CanvasActivity"
+    tools:context="com.thenathanjones.ibeacon.CanvasActivity"
     tools:ignore="MergeRootFrame" >
 
-    <com.thenathanjones.ibeaconlibrary.LocationView android:layout_width="fill_parent"
+    <com.thenathanjones.ibeacon.LocationView android:layout_width="fill_parent"
                                                     android:layout_height="fill_parent"
             android:id="@+id/locationView"/>
     </LinearLayout>

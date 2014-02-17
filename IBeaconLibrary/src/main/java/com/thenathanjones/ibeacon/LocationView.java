@@ -1,4 +1,4 @@
-package com.thenathanjones.ibeaconlibrary;
+package com.thenathanjones.ibeacon;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,9 +7,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import com.thenathanjones.ibeaconlibrary.services.IBeacon;
-import com.thenathanjones.ibeaconlibrary.services.IBeaconConstants;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -33,16 +30,42 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
     private int mCanvasHeight;
     private final List<IBeacon> mBeacons = new ArrayList<IBeacon>();
 
-    // Heath and Kate's - kitchen:outside and garage:bannister
-    private double mRoomWidth = 667;
-    private double mRoomHeight = 443;
+//    // Ze Office
+//    private double mRoomWidth = 1085;
+//    private double mRoomHeight = 680;
+//    private final Map<String, IBeaconLocation> mBeaconLocations = new HashMap<String, IBeaconLocation>() {{
+//        put("27760", IBeaconLocation.from(542, 10, 139)); // purple estimote
+//        put("30397", IBeaconLocation.from(467, 438, 139)); // green estimote
+//        put("55741", IBeaconLocation.from(84, 438, 139)); // blue estimote
+//        put("300", IBeaconLocation.from(542, 10, 139)); // MacBeacon on pedro
+//        put("240", IBeaconLocation.from(467, 438, 139)); // black bluecat
+//        put("268", IBeaconLocation.from(84, 438, 139));  // white bluecat
+//        put("229", IBeaconLocation.from(542, 10, 139));  // black bluecat
+//    }};
+
+    // Ze Office up high
+    private double mRoomWidth = 1085;
+    private double mRoomHeight = 680;
     private final Map<String, IBeaconLocation> mBeaconLocations = new HashMap<String, IBeaconLocation>() {{
-        put("240", IBeaconLocation.from(667, 95, 1)); // black bluecat
-        put("268", IBeaconLocation.from(70, 115, 0.2));  // white bluecat
-        put("27760", IBeaconLocation.from(75, 350, 1)); // purple estimote
-        put("30397", IBeaconLocation.from(270, 0, 1)); // green estimote
-        put("55741", IBeaconLocation.from(663, 398, 1)); // blue estimote
+        put("27760", IBeaconLocation.from(600, 0, 255)); // purple estimote
+        put("30397", IBeaconLocation.from(300, 680, 255)); // green estimote
+        put("55741", IBeaconLocation.from(100, 0, 255)); // blue estimote
+        put("300", IBeaconLocation.from(542, 10, 255)); // MacBeacon on pedro
+        put("240", IBeaconLocation.from(467, 438, 255)); // black bluecat
+        put("268", IBeaconLocation.from(1000, 680, 255));  // white bluecat
+        put("229", IBeaconLocation.from(542, 10, 255));  // black bluecat
     }};
+
+//    // Heath and Kate's - kitchen:outside and garage:bannister
+//    private double mRoomWidth = 667;
+//    private double mRoomHeight = 443;
+//    private final Map<String, IBeaconLocation> mBeaconLocations = new HashMap<String, IBeaconLocation>() {{
+//        put("240", IBeaconLocation.from(667, 95, 1)); // black bluecat
+//        put("268", IBeaconLocation.from(70, 115, 0.2));  // white bluecat
+//        put("27760", IBeaconLocation.from(75, 350, 1)); // purple estimote
+//        put("30397", IBeaconLocation.from(270, 0, 1)); // green estimote
+//        put("55741", IBeaconLocation.from(663, 398, 1)); // blue estimote
+//    }};
 
     // Home
 //    private double mRoomWidth = 727;
@@ -58,6 +81,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
     private Paint mLocationPaint;
     private Paint mRadiusPaint;
     private Paint mUserLocationPaint;
+    private Paint mUserLabelPaint;
     private Paint mLabelPaint;
     private Location mExistingUserLocation;
 
@@ -85,9 +109,14 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
         mRadiusPaint.setStrokeWidth(2);
         mRadiusPaint.setStyle(Paint.Style.STROKE);
 
+        mUserLabelPaint = new Paint();
+        mUserLabelPaint.setAntiAlias(true);
+        mUserLabelPaint.setARGB(255, 255, 10, 10);
+        mUserLabelPaint.setTextSize(40);
+
         mLabelPaint = new Paint();
         mLabelPaint.setAntiAlias(true);
-        mLabelPaint.setARGB(255, 255, 10, 10);
+        mLabelPaint.setARGB(255, 255, 255, 255);
         mLabelPaint.setTextSize(40);
     }
 
@@ -138,9 +167,12 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
             if (beaconLocation != null) {
                 int x = translateX(beaconLocation.x);
                 int y = translateY(beaconLocation.y);
-                int radius = (int) (report.accuracyInMetres * 100.0 / mRoomWidth * mCanvasWidth);
+                int radius = (int) (report.distanceInMetres() * 100.0 / mRoomWidth * mCanvasWidth);
                 canvas.drawCircle(x, y, 5, mLocationPaint);
                 canvas.drawCircle(x, y, radius, mRadiusPaint);
+
+                DecimalFormat formatter = new DecimalFormat("#.##");
+                canvas.drawText(formatter.format((double)radius / 100.0) + "m", x + radius/2, y + radius/2, mLabelPaint);
             }
         }
     }
@@ -157,7 +189,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
         Collections.sort(mBeacons, new Comparator<IBeacon>() {
             @Override
             public int compare(IBeacon lhs, IBeacon rhs) {
-                return lhs.accuracyInMetres > rhs.accuracyInMetres ? 1 : -1;
+                return lhs.distanceInMetres() > rhs.distanceInMetres() ? 1 : -1;
             }
         });
 
@@ -180,7 +212,7 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
             int y = translateY(userLocation.y * 100.0);
 
             canvas.drawCircle(x, y, 20, mUserLocationPaint);
-            canvas.drawText("x: " + formatter.format(userLocation.x) + ", y: " + formatter.format(userLocation.y), x + 50, y + 5, mLabelPaint);
+            canvas.drawText("x: " + formatter.format(userLocation.x) + ", y: " + formatter.format(userLocation.y), x + 50, y + 5, mUserLabelPaint);
 
             mExistingUserLocation = userLocation;
         }
@@ -193,8 +225,8 @@ public class LocationView extends SurfaceView implements SurfaceHolder.Callback 
     }
 
     private Location filteredLocation(Location newLocation, Location previousLocation) {
-        double x = previousLocation.x * (1 - IBeaconConstants.BLEND_FACTOR) + newLocation.x * IBeaconConstants.BLEND_FACTOR;
-        double y = previousLocation.y * (1 - IBeaconConstants.BLEND_FACTOR) + newLocation.y * IBeaconConstants.BLEND_FACTOR;
+        double x = previousLocation.x * (1 - IBeaconConstants.FILTER_FACTOR) + newLocation.x * IBeaconConstants.FILTER_FACTOR;
+        double y = previousLocation.y * (1 - IBeaconConstants.FILTER_FACTOR) + newLocation.y * IBeaconConstants.FILTER_FACTOR;
 
         return new Location(x,y);
     }

@@ -1,4 +1,4 @@
-package com.thenathanjones.ibeaconlibrary;
+package com.thenathanjones.ibeacon;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.thenathanjones.ibeaconlibrary.services.IBeacon;
-import com.thenathanjones.ibeaconlibrary.services.IBeaconListener;
-import com.thenathanjones.ibeaconlibrary.services.IBeaconService;
+import com.thenathanjones.ibeaconlibrary.R;
 
 import java.util.Collection;
 

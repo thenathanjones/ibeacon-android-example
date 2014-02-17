@@ -1,6 +1,4 @@
-package com.thenathanjones.ibeaconlibrary;
-
-import com.thenathanjones.ibeaconlibrary.services.IBeacon;
+package com.thenathanjones.ibeacon;
 
 import java.util.List;
 
@@ -29,10 +27,10 @@ public class Trilateration {
         double j = ey.dotProduct(P3.subtract(P1));
 
         // x = (pow(DistA,2) - pow(DistB,2) + pow(d,2))/(2*d)
-        double x = (Math.pow(beacons.get(0).accuracyInMetres, 2) - Math.pow(beacons.get(1).accuracyInMetres, 2) + Math.pow(d, 2))/(2*d);
+        double x = (Math.pow(beacons.get(0).distanceInMetres(), 2) - Math.pow(beacons.get(1).distanceInMetres(), 2) + Math.pow(d, 2))/(2*d);
 
         // y = ((pow(DistA,2) - pow(DistC,2) + pow(i,2) + pow(j,2))/(2*j)) - ((i/j)*x)
-        double y = ((Math.pow(beacons.get(0).accuracyInMetres, 2) - Math.pow(beacons.get(2).accuracyInMetres, 2) + Math.pow(i, 2) + Math.pow(j, 2))/(2*j)) - ((i/j)*x);
+        double y = ((Math.pow(beacons.get(0).distanceInMetres(), 2) - Math.pow(beacons.get(2).distanceInMetres(), 2) + Math.pow(i, 2) + Math.pow(j, 2))/(2*j)) - ((i/j)*x);
 
         Vector2 result = P1.add(ex.multiply(x)).add(ey.multiply(y));
 

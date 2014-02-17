@@ -1,4 +1,4 @@
-package com.thenathanjones.ibeaconlibrary;
+package com.thenathanjones.ibeacon;
 
 /**
  * Created by thenathanjones on 14/01/2014.

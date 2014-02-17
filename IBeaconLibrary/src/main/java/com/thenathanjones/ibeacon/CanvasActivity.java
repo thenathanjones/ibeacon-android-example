@@ -1,11 +1,9 @@
-package com.thenathanjones.ibeaconlibrary;
+package com.thenathanjones.ibeacon;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.thenathanjones.ibeaconlibrary.services.IBeacon;
-import com.thenathanjones.ibeaconlibrary.services.IBeaconListener;
-import com.thenathanjones.ibeaconlibrary.services.IBeaconService;
+import com.thenathanjones.ibeaconlibrary.R;
 
 import java.util.Collection;
 

@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.thenathanjones.ibeaconlibrary.MainActivity"
+            android:name="com.thenathanjones.ibeacon.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.thenathanjones.ibeaconlibrary.CanvasActivity"
+            android:name="com.thenathanjones.ibeacon.CanvasActivity"
             android:label="@string/title_activity_canvas" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

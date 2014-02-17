@@ -1,4 +1,4 @@
-package com.thenathanjones.ibeaconlibrary;
+package com.thenathanjones.ibeacon;
 
 public class Vector2 {
 
